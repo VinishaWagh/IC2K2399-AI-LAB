@@ -23,7 +23,7 @@ Each laboratory session is organized in its own folder (`Lab1`, `Lab2`, etc.) co
 | Lab | Experiment / Topic | Language | Status |
 |:---:|:---|:---:|:---:|
 | **Lab 1** | [Water Jug, Missionaries & Cannibals, Sudoku Solver](Lab1/) | Java | Completed |
-| **Lab 2** | BFS, DFS, Hill Climbing, Best First Search, A* | - | Pending |
+| **Lab 2** | [Graph Traversal, 8-Puzzle Solver, Maze Solver](Lab2/) | Java | Completed |
 | **Lab 3** | Data Preprocessing, EDA, NumPy, Pandas, Visualization | - | Pending |
 | **Lab 4** | Knowledge Representation, Rule-Based Systems, Semantic Networks | - | Pending |
 | **Lab 5** | Decision Tree Classifier, Model Evaluation | - | Pending |
@@ -41,11 +41,15 @@ IC-2K23-99-AI-LAB/
 │   ├── MissionariesCannibals.java # Simplified Missionaries and Cannibals Problem
 │   ├── SudokuSolver.java          # Clean 9x9 Sudoku Backtracking Solver
 │   └── README.md                  # Beginner-friendly lab explanations & algorithms
+├── Lab2/
+│   ├── GraphTraversal.java        # Graph Traversal using BFS and DFS
+│   ├── EightPuzzleSolver.java     # 8-Puzzle Solver using BFS
+│   ├── MazeSolver.java            # Maze Shortest Path Solver using BFS
+│   └── README.md                  # Beginner-friendly lab explanations & algorithms
 ├── datasets/                      # Datasets used across experiments
 ├── models/                        # Saved models / checkpoints
 ├── docs/                          # Documentation and diagrams
 │   └── algorithm-flowcharts/
-├── AI Lab.pdf                     # Lab manual and guidelines
 ├── README.md                      # Repository overview
 └── .gitignore                     # Git ignore rules for Java
 ```
@@ -66,4 +70,22 @@ java -cp Lab1 MissionariesCannibals
 
 # Run Sudoku Solver
 java -cp Lab1 SudokuSolver
+```
+
+---
+
+## Running Lab 2 Programs
+
+```bash
+# Compile all programs in Lab 2
+javac Lab2/GraphTraversal.java Lab2/EightPuzzleSolver.java Lab2/MazeSolver.java
+
+# Run Graph Traversal (BFS & DFS)
+java -cp Lab2 GraphTraversal
+
+# Run 8-Puzzle Solver
+java -cp Lab2 EightPuzzleSolver
+
+# Run Maze Solver
+java -cp Lab2 MazeSolver
 ```
