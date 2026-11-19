@@ -24,6 +24,7 @@ Each laboratory session is organized in its own folder (`Lab1`, `Lab2`, etc.) co
 |:---:|:---|:---:|:---:|
 | **Lab 1** | [Water Jug, Missionaries & Cannibals, Sudoku Solver](Lab1/) | Java | Completed |
 | **Lab 2** | [Graph Traversal, 8-Puzzle Solver, Maze Solver](Lab2/) | Java | Completed |
+| **Lab Test 2** | [Intelligent Travel Planner (Set 9 - Roll No: 99)](LabTest2/) | Turbo Prolog / Prolog | Completed |
 | **Lab 3** | Data Preprocessing, EDA, NumPy, Pandas, Visualization | - | Pending |
 | **Lab 4** | Knowledge Representation, Rule-Based Systems, Semantic Networks | - | Pending |
 | **Lab 5** | Decision Tree Classifier, Model Evaluation | - | Pending |
@@ -46,12 +47,18 @@ IC-2K23-99-AI-LAB/
 │   ├── EightPuzzleSolver.java     # 8-Puzzle Solver using BFS
 │   ├── MazeSolver.java            # Maze Shortest Path Solver using BFS
 │   └── README.md                  # Beginner-friendly lab explanations & algorithms
+├── LabTest2/
+│   ├── travel_planner.pro         # Turbo Prolog 2.0 implementation
+│   ├── travel_planner.pl          # SWI-Prolog / ISO Prolog implementation
+│   ├── test_cases_output.txt      # Terminal execution outputs
+│   └── README.md                  # Problem explanation, test cases & viva guide
 ├── datasets/                      # Datasets used across experiments
 ├── models/                        # Saved models / checkpoints
 ├── docs/                          # Documentation and diagrams
 │   └── algorithm-flowcharts/
+├── MCA_AI_Lab_Test_2_Problem_Statements.docx # Lab Test 2 Assignment Sheet
 ├── README.md                      # Repository overview
-└── .gitignore                     # Git ignore rules for Java
+└── .gitignore                     # Git ignore rules for Java & Prolog
 ```
 
 ---
@@ -89,3 +96,22 @@ java -cp Lab2 EightPuzzleSolver
 # Run Maze Solver
 java -cp Lab2 MazeSolver
 ```
+
+---
+
+## Running Lab Test 2 Programs
+
+### Option 1: Borland Turbo Prolog 2.0 (DOSBox)
+1. Load `LabTest2/travel_planner.pro` in Turbo Prolog (`F3`).
+2. Compile to memory (`Alt + C`).
+3. Run the program (`Alt + R`) to launch the interactive menu, or query directly in the Goal window:
+   ```prolog
+   plan_travel(city_a, city_f, cheapest).
+   ```
+
+### Option 2: SWI-Prolog
+```bash
+# Load and run tests in SWI-Prolog
+swipl -s LabTest2/travel_planner.pl -g run_all_tests -t halt
+```
+

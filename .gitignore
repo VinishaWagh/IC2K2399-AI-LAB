@@ -22,5 +22,8 @@ out/
 .DS_Store
 Thumbs.db
 
-# Documents
-*.pdf
+# Turbo Prolog temporary files
+*.bak
+*.sym
+*.obj
+
