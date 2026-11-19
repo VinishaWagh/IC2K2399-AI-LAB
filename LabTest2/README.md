@@ -1,13 +1,4 @@
 # Lab Test 2: Intelligent Travel Planner
-
-**Student Name:** Vinisha Wagh  
-**Roll Number:** IC-2K23-99  
-**Course:** IC-709D | Artificial Intelligence Lab  
-**Institute:** IIPS, DAVV Indore  
-**Assigned Set:** Set 9 (Roll No 90 to all)  
-
----
-
 ## 1. Problem Statement
 
 Develop a Prolog-based travel planner that represents a multi-city road network and finds the optimal route between a source and destination city based on user preference:
@@ -16,6 +7,9 @@ Develop a Prolog-based travel planner that represents a multi-city road network 
 - **Shortest:** Minimizes total distance (km)
 
 ---
+
+### Demo Video 
+https://drive.google.com/file/d/1zxvGUfqxVbmjFaU0o3wT4Ch9QgaHGtiQ/view?usp=sharing
 
 ## 2. Graph Network
 
@@ -119,62 +113,3 @@ Total Distance: 260 km
 Reason: This route has the shortest distance among the available routes.
 ==================================================
 ```
-
----
-
-## 5. Additional Challenges
-
-### 1. Avoid a Specified City (Avoid City B)
-- **Goal:** `plan_travel_avoid(city_a, city_f, cheapest, city_b).`
-- **Output:** Selects **City A &rarr; City E &rarr; City F** (Cost: Rs. 950, Time: 8 hrs, Dist: 260 km).
-
-### 2. Blocked Connection (Road A &mdash; B Closed)
-- **Goal:** `plan_travel_block(city_a, city_f, cheapest, city_a, city_b).`
-- **Output:** Automatically reroutes via **City A &rarr; City E &rarr; City F**.
-
-### 3. Compare Cheapest vs Fastest Route
-- **Goal:** `compare_cheapest_fastest(city_a, city_f).`
-- **Output:**
-```text
-Fastest route saves: 3 hours.
-Cheapest route saves: Rs. 550.
-```
-
-### 4. Display All Candidate Routes
-- **Goal:** `show_all_routes(city_a, city_f).`
-- **Output:** Lists all valid routes with distance, travel time, and cost.
-
----
-
-## 6. How to Run
-
-### In Borland Turbo Prolog 2.0 (DOSBox)
-1. Load `travel_planner.pro` (`F3`).
-2. Compile to memory (`Alt + C`).
-3. Run (`Alt + R`) to open the menu, or query directly:
-   ```prolog
-   plan_travel(city_a, city_f, cheapest).
-   ```
-
-### In SWI-Prolog
-```bash
-swipl travel_planner.pl
-```
-Query:
-```prolog
-?- test1.
-?- test2.
-?- test3.
-?- halt.
-```
-
----
-
-## 7. Viva Quick Reference
-
-1. **How does Prolog avoid getting stuck in loops?**  
-   It tracks visited cities in a list `[Next|Visited]` and skips cities already present in that list using `not(member(Next, Visited))`.
-2. **Why use `assertz` and `retract` for finding the best route?**  
-   Prolog variables reset during backtracking. Dynamic database facts persist across backtracking, allowing us to retain the best route found so far.
-3. **How to add a new city or change a road during the exam?**  
-   Add or edit an `edge/5` fact in the clauses section.

@@ -1,9 +1,3 @@
-TURBO PROLOG 2.0 / SWI-PROLOG EXECUTION OUTPUT
-Student Name: Vinisha Wagh | Roll Number: IC-2K23-99
-Lab Test 2: Set 9 - Intelligent Travel Planner
-Course: IC-709D Artificial Intelligence Lab
-======================================================================
-
 >>> TEST CASE 1: CHEAPEST ROUTE (City A to City F) <<<
 Goal: plan_travel(city_a, city_f, cheapest).
 ==================================================
