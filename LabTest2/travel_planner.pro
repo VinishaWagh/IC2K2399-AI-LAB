@@ -1,18 +1,7 @@
-/* ============================================================== */
-/* Program: Intelligent Travel Planner                            */
-/* Roll Number: IC-2K23-99                                        */
-/* Student Name: Vinisha Wagh                                     */
-/* Course: IC-709D | Artificial Intelligence Lab                  */
-/* Lab Test 2 - Set 9 (Roll No 90 to all)                         */
-/* Environment: Turbo Prolog 2.0 (Borland)                        */
-/* ============================================================== */
-
 domains
     city = symbol
     city_list = city*
-    distance = integer
-    time = integer
-    cost = integer
+    distance, time, cost = integer
     preference = symbol
     message = string
 
@@ -51,10 +40,7 @@ predicates
     run
 
 clauses
-    /* ----------------------------------------------------------- */
-    /* 1. Knowledge Base: Road Network Between Cities              */
-    /* edge(City1, City2, Distance_km, Time_hours, Cost_INR)       */
-    /* ----------------------------------------------------------- */
+    % Knowledge base: edge(From, To, Distance_km, Time_hours, Cost_Rs)
     edge(city_a, city_b, 100, 2, 250).
     edge(city_b, city_f, 250, 4, 600).
     edge(city_a, city_c, 120, 2, 400).
@@ -68,25 +54,22 @@ clauses
     edge(city_d, city_e, 90, 2, 250).
     edge(city_b, city_e, 130, 3, 300).
 
-    /* Road connections are bidirectional */
+    % Bidirectional connectivity
     connected(X, Y, D, T, C) :- edge(X, Y, D, T, C).
     connected(X, Y, D, T, C) :- edge(Y, X, D, T, C).
 
-    /* Check if next step is valid (not avoided and connection not blocked) */
+    % Valid step check
     valid_step(X, Y, D, T, C) :-
         connected(X, Y, D, T, C),
         not(avoid_city(Y)),
         not(blocked_edge(X, Y)),
         not(blocked_edge(Y, X)).
 
-    /* Helper: List membership for cycle prevention */
+    % Cycle prevention
     member(X, [X|_]) :- !.
     member(X, [_|Tail]) :- member(X, Tail).
 
-    /* ----------------------------------------------------------- */
-    /* 2. Graph Search with Backtracking & Cycle Detection         */
-    /* find_path(Curr, Dest, VisitedSoFar, RevPath, Dist, Time, Cost)*/
-    /* ----------------------------------------------------------- */
+    % Path search (DFS)
     find_path(Dest, Dest, Visited, Visited, 0, 0, 0).
     find_path(Curr, Dest, Visited, FullPath, TotalD, TotalT, TotalC) :-
         valid_step(Curr, Next, D, T, C),
@@ -96,36 +79,21 @@ clauses
         TotalT = T + SubT,
         TotalC = C + SubC.
 
-    /* Tail-recursive list reversal */
     reverse_list([], Acc, Acc).
     reverse_list([H|T], Acc, Result) :-
         reverse_list(T, [H|Acc], Result).
 
-    /* ----------------------------------------------------------- */
-    /* 3. Decision Rules & Optimization Heuristics                 */
-    /* is_better(Preference, D, T, C, BestD, BestT, BestC)        */
-    /* ----------------------------------------------------------- */
-    /* Cheapest: Minimize Cost; Tie-breaker: Minimize Time */
-    is_better(cheapest, _, _, C, _, _, BestC) :-
-        C < BestC.
-    is_better(cheapest, _, T, C, _, BestT, BestC) :-
-        C = BestC, T < BestT.
+    % Decision rules
+    is_better(cheapest, _, _, C, _, _, BestC) :- C < BestC.
+    is_better(cheapest, _, T, C, _, BestT, BestC) :- C = BestC, T < BestT.
 
-    /* Fastest: Minimize Time; Tie-breaker: Minimize Cost */
-    is_better(fastest, _, T, _, _, BestT, _) :-
-        T < BestT.
-    is_better(fastest, _, T, C, _, BestT, BestC) :-
-        T = BestT, C < BestC.
+    is_better(fastest, _, T, _, _, BestT, _) :- T < BestT.
+    is_better(fastest, _, T, C, _, BestT, BestC) :- T = BestT, C < BestC.
 
-    /* Shortest: Minimize Distance; Tie-breaker: Minimize Time */
-    is_better(shortest, D, _, _, BestD, _, _) :-
-        D < BestD.
-    is_better(shortest, D, T, _, BestD, BestT, _) :-
-        D = BestD, T < BestT.
+    is_better(shortest, D, _, _, BestD, _, _) :- D < BestD.
+    is_better(shortest, D, T, _, BestD, BestT, _) :- D = BestD, T < BestT.
 
-    /* ----------------------------------------------------------- */
-    /* 4. Optimization Engine using Turbo Prolog Dynamic Database  */
-    /* ----------------------------------------------------------- */
+    % Global optimum search via failure-driven loop
     clear_best :-
         retract(best_route(_, _, _, _)),
         fail.
@@ -135,7 +103,6 @@ clauses
         clear_best,
         assertz(best_route([], 9999, 9999, 9999)).
 
-    /* Failure-driven loop to explore all paths and retain the optimal one */
     search_all(Source, Dest, Pref) :-
         find_path(Source, Dest, [Source], RevPath, D, T, C),
         best_route(_, BestD, BestT, BestC),
@@ -146,7 +113,6 @@ clauses
         fail.
     search_all(_, _, _).
 
-    /* Main planner rule */
     plan_travel(Source, Dest, Pref) :-
         init_best,
         search_all(Source, Dest, Pref),
@@ -159,9 +125,7 @@ clauses
         write("Status: No valid route found between "), write(Source),
         write(" and "), write(Dest), nl.
 
-    /* ----------------------------------------------------------- */
-    /* 5. Output Formatting & Explanation                          */
-    /* ----------------------------------------------------------- */
+    % Output formatting
     city_name(city_a, "City A").
     city_name(city_b, "City B").
     city_name(city_c, "City C").
@@ -210,10 +174,7 @@ clauses
         write("Reason: "), display_reason(Pref), nl,
         write("=================================================="), nl.
 
-    /* ----------------------------------------------------------- */
-    /* 6. Additional Challenges                                    */
-    /* ----------------------------------------------------------- */
-    /* Avoid a specified city */
+    % Additional challenges
     plan_travel_avoid(Source, Dest, Pref, AvoidCity) :-
         assertz(avoid_city(AvoidCity)),
         city_name(AvoidCity, AName),
@@ -225,7 +186,6 @@ clauses
         retract(avoid_city(AvoidCity)),
         fail.
 
-    /* Handle blocked / unavailable connection */
     plan_travel_block(Source, Dest, Pref, City1, City2) :-
         assertz(blocked_edge(City1, City2)),
         city_name(City1, N1),
@@ -239,7 +199,6 @@ clauses
         retract(blocked_edge(City1, City2)),
         fail.
 
-    /* Compare Cheapest vs Fastest route */
     compare_cheapest_fastest(Source, Dest) :-
         nl,
         write("=================================================="), nl,
@@ -252,13 +211,10 @@ clauses
         TimeSaved = CT - FT,
         CostDiff = FC - CC,
         nl,
-        write("--- TRADE-OFF ANALYSIS ---"), nl,
-        write("Fastest route saves: "), write(TimeSaved), write(" hours of travel time."), nl,
-        write("Cheapest route saves: Rs. "), write(CostDiff), write(" in travel budget."), nl,
-        write("Decision Rule: Choose Fastest if time is critical; choose Cheapest for budget travel."), nl,
+        write("Fastest route saves: "), write(TimeSaved), write(" hours."), nl,
+        write("Cheapest route saves: Rs. "), write(CostDiff), nl,
         write("=================================================="), nl.
 
-    /* Display all candidate routes for comparison */
     show_all_routes(Source, Dest) :-
         nl,
         write("=================================================="), nl,
@@ -276,41 +232,20 @@ clauses
         write("       Distance: "), write(D), write(" km | Time: "),
         write(T), write(" hrs | Cost: Rs. "), write(C), nl.
 
-    /* ----------------------------------------------------------- */
-    /* 7. Test Cases & Interactive Menu                            */
-    /* ----------------------------------------------------------- */
-    test1 :-
-        nl, write(">>> RUNNING TEST CASE 1: CHEAPEST ROUTE <<<"), nl,
-        plan_travel(city_a, city_f, cheapest).
+    % Quick test shortcuts
+    test1 :- plan_travel(city_a, city_f, cheapest).
+    test2 :- plan_travel(city_a, city_f, fastest).
+    test3 :- plan_travel(city_a, city_f, shortest).
 
-    test2 :-
-        nl, write(">>> RUNNING TEST CASE 2: FASTEST ROUTE <<<"), nl,
-        plan_travel(city_a, city_f, fastest).
-
-    test3 :-
-        nl, write(">>> RUNNING TEST CASE 3: SHORTEST ROUTE <<<"), nl,
-        plan_travel(city_a, city_f, shortest).
-
-    handle_menu(1) :-
-        test1.
-    handle_menu(2) :-
-        test2.
-    handle_menu(3) :-
-        test3.
-    handle_menu(4) :-
-        nl, write(">>> TEST: AVOID CITY B (Cheapest City A to City F) <<<"), nl,
-        plan_travel_avoid(city_a, city_f, cheapest, city_b).
-    handle_menu(5) :-
-        nl, write(">>> TEST: CONNECTION A-B BLOCKED (Cheapest City A to F) <<<"), nl,
-        plan_travel_block(city_a, city_f, cheapest, city_a, city_b).
-    handle_menu(6) :-
-        compare_cheapest_fastest(city_a, city_f).
-    handle_menu(7) :-
-        show_all_routes(city_a, city_f).
-    handle_menu(8) :-
-        write("Exiting. Thank you!"), nl.
-    handle_menu(_) :-
-        write("Invalid selection! Please enter a choice between 1 and 8."), nl.
+    handle_menu(1) :- test1.
+    handle_menu(2) :- test2.
+    handle_menu(3) :- test3.
+    handle_menu(4) :- plan_travel_avoid(city_a, city_f, cheapest, city_b).
+    handle_menu(5) :- plan_travel_block(city_a, city_f, cheapest, city_a, city_b).
+    handle_menu(6) :- compare_cheapest_fastest(city_a, city_f).
+    handle_menu(7) :- show_all_routes(city_a, city_f).
+    handle_menu(8) :- write("Exiting. Thank you!"), nl.
+    handle_menu(_) :- write("Invalid choice! Enter 1-8."), nl.
 
     run :-
         nl,
@@ -318,14 +253,14 @@ clauses
         write("       INTELLIGENT TRAVEL PLANNER - MENU          "), nl,
         write("       Roll No: IC-2K23-99 | Set 9                "), nl,
         write("=================================================="), nl,
-        write(" 1. Run Test Case 1 (Cheapest Route: City A -> City F)"), nl,
-        write(" 2. Run Test Case 2 (Fastest Route:  City A -> City F)"), nl,
-        write(" 3. Run Test Case 3 (Shortest Route: City A -> City F)"), nl,
-        write(" 4. Additional Challenge: Avoid City B                "), nl,
-        write(" 5. Additional Challenge: Handle Blocked Road (A - B) "), nl,
-        write(" 6. Additional Challenge: Compare Cheapest vs Fastest "), nl,
-        write(" 7. Additional Challenge: Display All Candidate Routes"), nl,
-        write(" 8. Exit                                              "), nl,
+        write(" 1. Test Case 1: Cheapest Route (City A -> City F)"), nl,
+        write(" 2. Test Case 2: Fastest Route  (City A -> City F)"), nl,
+        write(" 3. Test Case 3: Shortest Route (City A -> City F)"), nl,
+        write(" 4. Challenge 1: Avoid City B                     "), nl,
+        write(" 5. Challenge 2: Block Connection (A - B)         "), nl,
+        write(" 6. Challenge 3: Compare Cheapest vs Fastest      "), nl,
+        write(" 7. Challenge 4: Show All Candidate Routes        "), nl,
+        write(" 8. Exit                                          "), nl,
         write("=================================================="), nl,
         write("Enter choice (1-8): "),
         readint(Choice),
