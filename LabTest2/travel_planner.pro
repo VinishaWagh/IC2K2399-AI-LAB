@@ -251,7 +251,6 @@ clauses
         nl,
         write("=================================================="), nl,
         write("       INTELLIGENT TRAVEL PLANNER - MENU          "), nl,
-        write("       Roll No: IC-2K23-99 | Set 9                "), nl,
         write("=================================================="), nl,
         write(" 1. Test Case 1: Cheapest Route (City A -> City F)"), nl,
         write(" 2. Test Case 2: Fastest Route  (City A -> City F)"), nl,
